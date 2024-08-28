@@ -1,0 +1,65 @@
+{% extends 'layouts/main.html' %}
+{% load static %}
+
+{% block extra_style %}
+<style>
+
+</style>
+{% endblock %}
+
+{% block body %}
+
+<div class="shop__sidebar__search">
+    <form action="{% url 'papp:search' %}" method="get">
+        <input type="text" name="q" value="{{ query }}" placeholder="Search...">
+        <button type="submit"><span class="icon_search"></span></button>
+    </form>
+</div>
+
+<div class="row">
+    {% for product in page_obj %}
+    <div class="col-lg-4 col-md-6 col-sm-6">
+        <div class="product__item">
+            <div class="product__item__pic set-bg" data-setbg="{{ product.product_image.url }}">
+                <ul class="product__hover">
+                    <li><a href="#"><img src="{% static 'img/icon/heart.png' %}" alt=""><span>Wishlist</span></a></li>
+                </ul>
+            </div>
+            <div class="product__item__text">
+                <h6>{{ product.name }}</h6>
+                <a href="{% url 'papp:productview' product.category.slug product.slug %}" class="add-cart">View Product</a>
+                <div class="rating">
+                    <i class="fa fa-star-o"></i>
+                    <i class="fa fa-star-o"></i>
+                    <i class="fa fa-star-o"></i>
+                    <i class="fa fa-star-o"></i>
+                    <i class="fa fa-star-o"></i>
+                </div>
+                <h5>₹{{ product.selling_price }}</h5>
+            </div>
+        </div>
+    </div>
+    {% empty %} 
+    <p>No products found for "{{ query }}".</p>
+    {% endfor %}
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="pagination">
+            {% if page_obj.has_previous %}
+                <a href="?q={{ query }}&page=1" class="btn-first">First</a>
+                <a href="?q={{ query }}&page={{ page_obj.previous_page_number }}" class="btn-previous">Previous</a>
+            {% endif %}
+            
+            <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+            
+            {% if page_obj.has_next %}
+                <a href="?q={{ query }}&page={{ page_obj.next_page_number }}" class="btn-next">Next</a>
+                <a href="?q={{ query }}&page={{ page_obj.paginator.num_pages }}" class="btn-last">Last</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock body %}

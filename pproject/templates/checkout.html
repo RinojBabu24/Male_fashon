@@ -1,0 +1,300 @@
+{% extends 'layouts/main.html' %}
+{% load static %}
+
+
+{% block extra_style %}
+<style>
+
+.checkout__input__radio {
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px; 
+}
+
+
+.checkout__input__radio label {
+    font-size: 15px;
+    color: #0d0d0d;
+    position: relative;
+    padding-left: 35px; 
+    cursor: pointer;
+    margin-bottom: 16px;
+    display: block;
+}
+
+
+.checkout__input__radio label input {
+    position: absolute;
+    visibility: hidden;
+}
+
+
+.checkout__input__radio label .radio-checkmark {
+    position: absolute;
+    left: 0;
+    top: 50%; 
+    transform: translateY(-50%); 
+    height: 20px; 
+    width: 20px; 
+    border: 2px solid #000; 
+    border-radius: 3px; 
+    content: "";
+    background: #fff; 
+}
+
+
+.checkout__input__radio label input:checked ~ .radio-checkmark {
+    background: #e53637; 
+    border-color: #e53637; 
+}
+
+
+.checkout__input__radio label .radio-checkmark:after {
+    content: "";
+    position: absolute;
+    display: none; 
+}
+
+
+.checkout__input__radio label input:checked ~ .radio-checkmark:after {
+    display: block;
+    left: 5px;
+    top: 50%; 
+    transform: translateY(-50%) rotate(45deg); 
+    width: 8px;
+    height: 14px; 
+    border: solid #fff; 
+    border-width: 0 2px 2px 0;
+}
+
+.payment-methods__title {
+    font-size: 1.5rem; 
+    font-weight: bold;
+    color: #333; 
+    margin-bottom: 1rem; 
+    border-bottom: 2px solid #f0f0f0; 
+    padding-bottom: 0.5rem; 
+}
+
+
+
+
+
+
+.checkout__order__products {
+    padding: 1rem; 
+}
+
+
+.order__header {
+    display: grid;
+    grid-template-columns: 1fr 3fr 2fr; 
+    gap: 1rem; 
+    font-weight: bold;
+    padding-bottom: 0.5rem; 
+    margin-bottom: 1rem; 
+}
+
+
+.checkout__total__products {
+    list-style: none; 
+    padding: 0; 
+    margin: 0; 
+}
+
+
+.order__item {
+    display: grid;
+    grid-template-columns: 1fr 3fr 2fr; 
+    gap: 1rem; 
+    border-bottom: 1px solid #eee; 
+    padding: 0.5rem 0;
+}
+
+.order__item__serial, .order__item__name, .order__item__total {
+    display: block; 
+}
+
+
+
+
+
+
+
+
+
+
+
+</style>
+{% endblock %}
+
+{% block body %}
+
+    <!-- Checkout Section Begin -->
+    <section class="checkout spad">
+        <div class="container">
+            <div class="checkout__form">
+                <form action="#">
+                    <div class="row">
+                        <div class="col-lg-8 col-md-6">
+                            <h6 class="coupon__code"><span class="icon_tag_alt"></span> Have a coupon? <a href="#">Click
+                            here</a> to enter your code</h6>
+                            <h6 class="checkout__title">Billing Details</h6>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="checkout__input">
+                                        <p>Fist Name<span>*</span></p>
+                                        <input type="text">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="checkout__input">
+                                        <p>Last Name<span>*</span></p>
+                                        <input type="text">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="checkout__input">
+                                <p>Country<span>*</span></p>
+                                <input type="text">
+                            </div>
+                            <div class="checkout__input">
+                                <p>Address<span>*</span></p>
+                                <input type="text" placeholder="Street Address" class="checkout__input__add">
+                                <input type="text" placeholder="Apartment, suite, unite ect (optinal)">
+                            </div>
+                            <div class="checkout__input">
+                                <p>Town/City<span>*</span></p>
+                                <input type="text">
+                            </div>
+                            <div class="checkout__input">
+                                <p>Country/State<span>*</span></p>
+                                <input type="text">
+                            </div>
+                            <div class="checkout__input">
+                                <p>Postcode / ZIP<span>*</span></p>
+                                <input type="text">
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="checkout__input">
+                                        <p>Phone<span>*</span></p>
+                                        <input type="text">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="checkout__input">
+                                        <p>Email<span>*</span></p>
+                                        <input type="text">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="checkout__input__checkbox">
+                                <label for="acc">
+                                    Create an account?
+                                    <input type="checkbox" id="acc">
+                                    <span class="checkmark"></span>
+                                </label>
+                                <p>Create an account by entering the information below. If you are a returning customer
+                                please login at the top of the page</p>
+                            </div>
+                            <div class="checkout__input">
+                                <p>Account Password<span>*</span></p>
+                                <input type="text">
+                            </div>
+                            <div class="checkout__input__checkbox">
+                                <label for="diff-acc">
+                                    Note about your order, e.g, special noe for delivery
+                                    <input type="checkbox" id="diff-acc">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <div class="checkout__input">
+                                <p>Order notes<span>*</span></p>
+                                <input type="text"
+                                placeholder="Notes about your order, e.g. special notes for delivery.">
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-4 col-md-6">
+                            <div class="checkout__order">
+                                <h4 class="order__title">Your order</h4>
+                                <div class="checkout__order__products">
+                                    <div class="order__header">
+                                        <span class="order__header__item">Sl.no</span>
+                                        <span class="order__header__item">Product</span>
+                                        <span class="order__header__item">Total</span>
+                                    </div>
+                                    <ul class="checkout__total__products">
+                                        {% if items %}
+                                            {% for item in items %}
+                                                <li class="order__item">
+                                                    <span class="order__item__serial">{{ forloop.counter }}</span>
+                                                    <span class="order__item__name">{{ item.product.name }}</span>
+                                                    <span class="order__item__total">₹{{ item.total_price }}</span>
+                                                </li>
+                                            {% endfor %}
+                                        {% else %}
+                                            <li>No items in cart.</li>
+                                        {% endif %}
+                                    </ul>
+                                </div>
+                                
+                                
+                                <ul class="checkout__total__all">
+                                    <li>Subtotal <span>₹{{ subtotal }}</span></li>
+                                    <li>Total <span>₹{{ total }}</span></li>
+                                </ul>
+                                <div class="checkout__payment-methods">
+                                        <h4 class="payment-methods__title">Select The Payment Option</h4>
+                                    <div class="checkout__input__radio">
+                                        <label for="paypal">
+                                            PayPal
+                                            <input type="radio" id="paypal" name="payment-method" value="paypal">
+                                            <span class="radio-checkmark"></span>
+                                        </label>
+                                    </div>
+                                
+                                    <div class="checkout__input__radio">
+                                        <label for="upi">
+                                            UPI
+                                            <input type="radio" id="upi" name="payment-method" value="upi">
+                                            <span class="radio-checkmark"></span>
+                                        </label>
+                                    </div>
+                                
+                                    <div class="checkout__input__radio">
+                                        <label for="net-banking">
+                                            Net Banking
+                                            <input type="radio" id="net-banking" name="payment-method" value="net-banking">
+                                            <span class="radio-checkmark"></span>
+                                        </label>
+                                    </div>
+                                
+                                    <div class="checkout__input__radio">
+                                        <label for="cash-on-delivery">
+                                            Cash on Delivery
+                                            <input type="radio" id="cash-on-delivery" name="payment-method" value="cash-on-delivery">
+                                            <span class="radio-checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                        
+                                <a href="{% url 'papp:final' %}" class="site-btn">PLACE ORDER</a>
+                            </div>
+                        </div>
+                        
+                        
+
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+    <!-- Checkout Section End -->
+
+
+
+
+    {% endblock body %}

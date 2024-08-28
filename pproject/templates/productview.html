@@ -1,0 +1,480 @@
+{% extends 'layouts/main.html' %}
+{% load static %}
+
+
+
+
+{% block extra_style %}
+<style>
+.product__details__newpic__item {
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    height: 100%; 
+}
+
+.product__details__newpic__item img {
+    max-width: 100%; 
+    max-height: 300px; 
+    object-fit: contain; 
+}
+
+
+
+.product__details__newpic__item {
+    width: 100%; 
+    height: 300px; 
+    display: flex;
+    align-items: center; 
+    justify-content: center; 
+    overflow: hidden; 
+    position: relative; 
+}
+
+.product__details__newpic__item img {
+    width: 100%; 
+    height: 50%; 
+    object-fit:contain;
+    position: absolute;
+    top: 50%;
+    left: 0;
+}
+
+
+.product__details__cart__option {
+    display: flex;
+    flex-direction: column; 
+    align-items: center; 
+    margin-bottom: 20px; 
+}
+
+.product__details__cart__option form {
+    display: flex;
+    align-items: center; 
+    gap: 10px; 
+}
+
+.quantity, .product__details__option__size {
+    margin-right: 10px; 
+}
+
+.product__details__option__size label {
+    margin-right: 10px; 
+}
+
+
+.button-container {
+    display: flex;
+    justify-content: center; 
+    gap: 20px;
+}
+
+.primary-btn a {
+    color: #fff; 
+    text-decoration: none; 
+    display: inline-block; 
+   
+}
+
+
+.primary-btn a:hover {
+    color: #fff; 
+    cursor: pointer; 
+}
+
+
+.primary-btn {
+    margin-top: 20px; 
+}
+
+
+
+
+/* Container for the related products section */
+.related {
+    padding: 60px 0;
+}
+
+.related-title {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+/* Product item styling */
+.product__item {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.product__item:hover {
+    border-color: #333;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.product__item__pic {
+    position: relative;
+    width: 100%;
+    height: 0;
+    padding-top: 75%; /* Aspect ratio 4:3 */
+    background-size: cover;
+    background-position: center;
+}
+
+/* For setting background image */
+.product__item__pic.set-bg {
+    background-image: url('default-image-url.jpg'); /* Fallback image */
+}
+
+/* Text and price styling */
+.product__item__text {
+    padding: 15px;
+    text-align: center;
+}
+
+.product__item__text h6 {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.product__item__text .add-cart {
+    display: inline-block;
+    font-size: 14px;
+    color: #007bff;
+    text-decoration: none;
+    margin-bottom: 10px;
+}
+
+.product__item__text .rating {
+    margin-bottom: 10px;
+}
+
+.product__item__text .rating i {
+    color: #ffcc00;
+    margin-right: 3px;
+}
+
+.product__item__text .rating i.fa-star-o {
+    color: #ccc;
+}
+
+.product__item__text h5 {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Responsive layout */
+@media (max-width: 1024px) {
+    .product__item {
+        margin-bottom: 30px;
+    }
+}
+
+@media (max-width: 768px) {
+    .product__item__text h6 {
+        font-size: 14px;
+    }
+
+    .product__item__text h5 {
+        font-size: 16px;
+    }
+}
+
+
+
+</style>
+{% endblock %}
+
+
+
+{% block body %}
+    <!-- Product Details Section Begin -->
+    <section class="shop-details">
+        <div class="container">
+            <div class="row">
+                   
+                <div class="tab-content">
+                    <div class="tab-pane active">
+                        <div class="product__details__newpic__item">
+                            <img src="{{ prod.product_image.url }}" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row d-flex justify-content-center">
+            <div class="col-lg-8">
+                <div class="product__details__text">
+                    <h4>{{ prod.name }}</h4>
+                    <div class="rating">
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star-o"></i>
+                        <span> - 5 Reviews</span>
+                    </div>
+                    <h3>₹ {{ prod.selling_price }} <span>₹ {{ prod.orginal_price }}</span></h3>
+                    <p>{{ prod.description }}</p>
+                    <div class="product__details__option">
+                        
+                        
+                    </div>
+                    <div class="product__details__cart__option">
+                    <form action="{% url 'papp:addtocart' prod.slug %}" method="POST">
+                            {% csrf_token %}
+                        <div class="quantity">
+                            <div class="pro-qty">
+                                <input type="number" name="quantity" value="1" min="1">
+                            </div>
+                        </div>
+                        <div class="product__details__option__size">
+                            <span>Size:</span>
+                            <label for="xxl">XXL
+                                <input type="radio" id="xxl" name="size" value="XXL">
+                            </label>
+                            <label for="xl">XL
+                                <input type="radio" id="xl" name="size" value="XL">
+                            </label>
+                            <label for="l">L
+                                <input type="radio" id="l" name="size" value="L">
+                            </label>
+                            <label for="s">S
+                                <input type="radio" id="s" name="size" value="S">
+                            </label>
+                        </div>
+                    
+                        <button type="submit" class="primary-btn"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-cart3" viewBox="0 0 16 16">
+                            <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l.84 4.479 9.144-.459L13.89 4zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
+                          </svg> Add to Cart</button>
+                         
+                    </form>
+                    
+                    </div>
+                    
+                   
+                    <div class="product__details__last__option">
+                        
+                        <img src="img/shop-details/details-payment.png" alt="">
+                        <ul>
+                            <li><span>PRODUCT ID:</span>M0{{ prod.id }}</li>
+                            <li><span>Categories:</span> {{ prod.category }}</li>
+                        
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- <div class="row">
+            <div class="col-lg-12">
+                <div class="product__details__tab">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-toggle="tab" href="#tabs-5"
+                            role="tab">Description</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#tabs-6" role="tab">Customer
+                            Previews(5)</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#tabs-7" role="tab">Additional
+                            information</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="tabs-5" role="tabpanel">
+                            <div class="product__details__tab__content">
+                                <p class="note">{{ prod.description }}</p>
+                                <div class="product__details__tab__content__item">
+                                    <h5>Products Infomation</h5>
+                                    <p>A Pocket PC is a handheld computer, which features many of the same
+                                        capabilities as a modern PC. These handy little devices allow
+                                        individuals to retrieve and store e-mail messages, create a contact
+                                        file, coordinate appointments, surf the internet, exchange text messages
+                                        and more. Every product that is labeled as a Pocket PC must be
+                                        accompanied with specific software to operate the unit and must feature
+                                    a touchscreen and touchpad.</p>
+                                    <p>As is the case with any new technology product, the cost of a Pocket PC
+                                        was substantial during it’s early release. For approximately $700.00,
+                                        consumers could purchase one of top-of-the-line Pocket PCs in 2003.
+                                        These days, customers are finding that prices have become much more
+                                        reasonable now that the newness is wearing off. For approximately
+                                    $350.00, a new Pocket PC can now be purchased.</p>
+                                </div>
+                                <div class="product__details__tab__content__item">
+                                    <h5>Material used</h5>
+                                    <p>Polyester is deemed lower quality due to its none natural quality’s. Made
+                                        from synthetic materials, not natural like wool. Polyester suits become
+                                        creased easily and are known for not being breathable. Polyester suits
+                                        tend to have a shine to them compared to wool and cotton suits, this can
+                                        make the suit look cheap. The texture of velvet is luxurious and
+                                        breathable. Velvet is a great choice for dinner party jacket and can be
+                                    worn all year round.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="tabs-6" role="tabpanel">
+                            <div class="product__details__tab__content">
+                                <div class="product__details__tab__content__item">
+                                    <h5>Products Infomation</h5>
+                                    <p>A Pocket PC is a handheld computer, which features many of the same
+                                        capabilities as a modern PC. These handy little devices allow
+                                        individuals to retrieve and store e-mail messages, create a contact
+                                        file, coordinate appointments, surf the internet, exchange text messages
+                                        and more. Every product that is labeled as a Pocket PC must be
+                                        accompanied with specific software to operate the unit and must feature
+                                    a touchscreen and touchpad.</p>
+                                    <p>As is the case with any new technology product, the cost of a Pocket PC
+                                        was substantial during it’s early release. For approximately $700.00,
+                                        consumers could purchase one of top-of-the-line Pocket PCs in 2003.
+                                        These days, customers are finding that prices have become much more
+                                        reasonable now that the newness is wearing off. For approximately
+                                    $350.00, a new Pocket PC can now be purchased.</p>
+                                </div>
+                                <div class="product__details__tab__content__item">
+                                    <h5>Material used</h5>
+                                    <p>Polyester is deemed lower quality due to its none natural quality’s. Made
+                                        from synthetic materials, not natural like wool. Polyester suits become
+                                        creased easily and are known for not being breathable. Polyester suits
+                                        tend to have a shine to them compared to wool and cotton suits, this can
+                                        make the suit look cheap. The texture of velvet is luxurious and
+                                        breathable. Velvet is a great choice for dinner party jacket and can be
+                                    worn all year round.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="tabs-7" role="tabpanel">
+                            <div class="product__details__tab__content">
+                                <p class="note">Nam tempus turpis at metus scelerisque placerat nulla deumantos
+                                    solicitud felis. Pellentesque diam dolor, elementum etos lobortis des mollis
+                                    ut risus. Sedcus faucibus an sullamcorper mattis drostique des commodo
+                                pharetras loremos.</p>
+                                <div class="product__details__tab__content__item">
+                                    <h5>Products Infomation</h5>
+                                    <p>A Pocket PC is a handheld computer, which features many of the same
+                                        capabilities as a modern PC. These handy little devices allow
+                                        individuals to retrieve and store e-mail messages, create a contact
+                                        file, coordinate appointments, surf the internet, exchange text messages
+                                        and more. Every product that is labeled as a Pocket PC must be
+                                        accompanied with specific software to operate the unit and must feature
+                                    a touchscreen and touchpad.</p>
+                                    <p>As is the case with any new technology product, the cost of a Pocket PC
+                                        was substantial during it’s early release. For approximately $700.00,
+                                        consumers could purchase one of top-of-the-line Pocket PCs in 2003.
+                                        These days, customers are finding that prices have become much more
+                                        reasonable now that the newness is wearing off. For approximately
+                                    $350.00, a new Pocket PC can now be purchased.</p>
+                                </div>
+                                <div class="product__details__tab__content__item">
+                                    <h5>Material used</h5>
+                                    <p>Polyester is deemed lower quality due to its none natural quality’s. Made
+                                        from synthetic materials, not natural like wool. Polyester suits become
+                                        creased easily and are known for not being breathable. Polyester suits
+                                        tend to have a shine to them compared to wool and cotton suits, this can
+                                        make the suit look cheap. The texture of velvet is luxurious and
+                                        breathable. Velvet is a great choice for dinner party jacket and can be
+                                    worn all year round.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+    </section>
+    <!-- Product Details Section End -->
+
+    <!-- Related Section Begin -->
+    <section class="related spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h3 class="related-title">Related Products</h3>
+                </div>
+            </div>
+            <div class="row">
+                {% for product in products %}
+                <div class="col-lg-4 col-md-6 col-sm-6">
+                    <div class="product__item">
+                        <div class="product__item__pic set-bg" data-setbg="{{ product.product_image.url }}">
+                           
+                        </div>
+                        <div class="product__item__text">
+                            <h6>{{ product.name }}</h6>
+                            
+                            <a href="{% url 'papp:productview' product.category.slug product.slug %}" class="add-cart">View Product</a>
+
+                            
+                            <div class="rating">
+                                <i class="fa fa-star-o"></i>
+                                <i class="fa fa-star-o"></i>
+                                <i class="fa fa-star-o"></i>
+                                <i class="fa fa-star-o"></i>
+                                <i class="fa fa-star-o"></i>
+                            </div>
+                            <h5>₹{{ product.selling_price }}</h5>
+                            <div class="product__color__select">
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <p>No products found in this category.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </section> 
+
+    <!-- Related Section End -->
+     
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const form = document.querySelector(".product__details__cart__option form");
+            form.addEventListener("submit", function(event) {
+                const sizeSelected = form.querySelector("input[name='size']:checked");
+                if (!sizeSelected) {
+                    event.preventDefault();
+                    alert("Please select a size before adding the product to the cart.");
+                }
+            });
+        });
+        </script>
+        <script type="text/javascript">
+            $(document).ready(function(){
+                $('.related-products-slider').slick({
+                    slidesToShow: 3,
+                    slidesToScroll: 1,
+                    infinite: true,
+                    arrows: true,
+                    dots: true,
+                    responsive: [
+                        {
+                            breakpoint: 1024,
+                            settings: {
+                                slidesToShow: 2,
+                                slidesToScroll: 1
+                            }
+                        },
+                        {
+                            breakpoint: 600,
+                            settings: {
+                                slidesToShow: 1,
+                                slidesToScroll: 1
+                            }
+                        }
+                    ]
+                });
+            });
+        </script>
+        
+
+            
+
+{% endblock body %}

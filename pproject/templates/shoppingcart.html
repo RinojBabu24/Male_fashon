@@ -1,0 +1,161 @@
+{% extends 'layouts/main.html' %}
+{% load static %}
+
+{% block extra_style %}
+<style>
+.product__cart__item__pic {
+    width: 100px; /* Adjust width as needed */
+    height: 100px; /* Adjust height as needed */
+    overflow: hidden; /* Ensure image doesn't overflow the container */
+    display: flex; /* Center the image horizontally and vertically */
+    align-items: center; /* Center vertically */
+    justify-content: center; /* Center horizontally */
+}
+
+.product__cart__item__pic img {
+    width: 100%; /* Make the image responsive to container width */
+    height: auto; /* Maintain aspect ratio */
+    object-fit: cover; /* Ensure the image covers the container without distortion */
+}
+
+.table-spacing th, .table-spacing td {
+    padding: 10px; /* Adjust padding as needed */
+}
+
+.table-spacing .size-column {
+    padding-right: 20px; /* Create extra space between Size and Quantity columns */
+}
+
+.table-spacing .quantity-column {
+    padding-left: 30px; /* Create extra space between Size and Quantity columns */
+}
+
+
+/* Style for size text in the cart */
+.shopping__cart__table table tbody tr td.quantity__item.size-column {
+    color: #111111;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+/* Style for quantity text in the cart */
+.shopping__cart__table table tbody tr td.quantity__item.quantity-column .quantity {
+    color: #111111;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+
+</style>
+{% endblock %}
+
+{% block body %}
+<!-- Shopping Cart Section Begin -->
+<section class="shopping-cart spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="shopping__cart__table">
+                    <form method="POST" action="">
+                        {% csrf_token %}
+                        <table class="table-spacing">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th class="size-column">Size</th> 
+                                    <th class="quantity-column">Quantity</th> 
+                                    <th>Total</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if cart_items %}
+                                
+                                {% for item in cart_items %}
+                                <tr>
+                                    <td class="product__cart__item">
+                                        <div class="product__cart__item__pic">
+                                            <img src="{{ item.product.product_image.url }}" alt="{{ item.product.name }}">
+                                        </div>
+                                        <div class="product__cart__item__text">
+                                            <h6>{{ item.product.name }}</h6>
+                                            <h5>₹{{ item.product.selling_price }}</h5>
+                                        </div>
+                                    </td>
+                                    
+                                    <td class="quantity__item size-column"> 
+                                        {{ item.size }} 
+                                    </td>
+
+                                    <td class="quantity__item quantity-column">
+                                        <div class="quantity">
+                                            {{ item.quantity }}
+                                            
+                                        </div>
+                                        
+                                    </td>
+                                    
+                                   
+                                    <td class="cart__price">₹{{ item.total_price }}</td>
+                                    <td class="cart__close">
+                                        <a href="{% url 'papp:removefromcart' item.id %}"><i class="fa fa-close"></i></a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                                {% else %}
+                                <tr>
+                                    <td colspan="5">Your cart is empty.</td> 
+                                </tr>
+                                {% endif %}
+                                
+                            </tbody>
+                        </table>
+
+                    </form>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6 col-md-6 col-sm-6">
+                        <div class="continue__btn update__btn">
+                            <a href="{% url 'papp:shop' %}">Continue Shopping</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="cart__discount">
+                    <h6>Discount codes</h6>
+                    <form action="#">
+                        <input type="text" placeholder="Coupon code">
+                        <button type="submit">Apply</button>
+                    </form>
+                </div>
+                <div class="cart__total">
+                    <h6>Cart total</h6>
+                    <ul>
+                        <li>Subtotal <span>₹{{ subtotal }}</span></li>
+                        <li>Total <span>₹{{ total }}</span></li>
+                    </ul>
+                    <a href="{% url 'papp:checkout' %}" class="primary-btn" id="proceed-btn">Proceed to checkout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Shopping Cart Section End -->
+
+<!-- JavaScript to handle empty cart check -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var proceedBtn = document.getElementById('proceed-btn');
+        var cartItems = '{{ cart_items|length }}';
+    
+        proceedBtn.addEventListener('click', function(event) {
+            if (parseInt(cartItems) === 0) {
+                event.preventDefault(); 
+                alert('Your cart is empty. Please add products to the cart before proceeding to checkout.');
+            }
+        });
+    });
+</script>
+
+{% endblock body %}
